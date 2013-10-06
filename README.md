@@ -2,6 +2,9 @@
 
 just a BitTorrent DHT Sniffer (based on python-libtorrent)
 
+* http://www.slideshare.net/inaz2/20131006r02-sniffing-bittorrentdht
+
+
 ## Install prerequisites on Ubuntu
 
 ```
