@@ -88,9 +88,11 @@ def fsize(fsize_b):
     return "%.1f %s" % (fsize_gb, "GiB")
 
 
+serial = 0L
 info_hashes = {}
 
 def handle_alert(ses, alert):
+    global serial
     alert_type = type(alert).__name__
     if alert_type == 'dht_get_peers_alert':
         try:
@@ -99,8 +101,9 @@ def handle_alert(ses, alert):
             return
 
         print >>sys.stderr, "received get_peers: %s" % info_hash
+        serial += 1
         if not info_hash in info_hashes:
-            info_hashes[info_hash] = time.time()
+            info_hashes[info_hash] = {'serial': serial, 'unixtime': time.time()}
         else:
             return
 
@@ -119,9 +122,11 @@ def handle_alert(ses, alert):
         info_hash = str(h.info_hash())
         if h.is_valid():
             ti = h.get_torrent_info()
-            seconds = info_hashes[info_hash]
+            serial = info_hashes[info_hash]['serial']
+            unixtime = info_hashes[info_hash]['unixtime']
             print '\t'.join([
-                    time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(seconds)), 
+                    str(serial),
+                    time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(unixtime)), 
                     info_hash, 
                     fsize(ti.total_size()), 
                     "%d files" % ti.num_files(), 
