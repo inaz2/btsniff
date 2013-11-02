@@ -28,5 +28,5 @@ $ python btsniff.py ubuntu-12.04.3-server-amd64.iso.torrent
 or
 
 ```
-$ nohup python btsniff.py ubuntu-12.04.3-server-amd64.iso.torrent >btsniff.log 2>/dev/null &
+$ nohup python btsniff.py ubuntu-12.04.3-server-amd64.iso.torrent >/dev/null 2>&1 &
 ```
