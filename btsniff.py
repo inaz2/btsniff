@@ -6,6 +6,9 @@ import time
 import libtorrent as lt
 from base64 import b32encode
 
+lt.alert.category_t.dht_notification = 0x400    # monkey patching
+
+
 class Btsniff:
     def __init__(self):
         self.ses = None
@@ -17,7 +20,7 @@ class Btsniff:
             os.mkdir('log')
 
         self.ses = lt.session()
-        self.ses.set_alert_mask(lt.alert.category_t.status_notification | 0x400) # lt.alert.category_t.dht_notification
+        self.ses.set_alert_mask(lt.alert.category_t.status_notification | lt.alert.category_t.dht_notification)
 
         self.ses.listen_on(port, port)
         self.ses.start_dht()
