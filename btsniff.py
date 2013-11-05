@@ -15,6 +15,8 @@ class Btsniff:
         self.serial = 0L
         self.info_hashes = {}
 
+        self.waiting_torrents_limit = 500
+
     def start(self, torrent_file, port=6881):
         if not os.path.isdir('log'):
             os.mkdir('log')
@@ -65,6 +67,10 @@ class Btsniff:
 
             h = self.ses.add_torrent({'info_hash': alert.info_hash, 'save_path': './'})
             h.queue_position_top()
+
+            waiting_torrents = [h for h in self.ses.get_torrents() if h.status().state == lt.torrent_status.downloading_metadata]
+            for h in waiting_torrents[self.waiting_torrents_limit:]:
+                self.ses.remove_torrent(h)
         elif alert_type == 'metadata_received_alert':
             h = alert.handle
             info_hash = str(h.info_hash())
