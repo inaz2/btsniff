@@ -50,7 +50,7 @@ class Btsniff:
 
         if alert_type == 'dht_get_peers_alert':
             try:
-                info_hash = str(alert.info_hash)
+                info_hash = alert.info_hash.to_string()
             except:
                 return
 
@@ -60,7 +60,7 @@ class Btsniff:
             else:
                 return
 
-            h = self.ses.add_torrent({'info_hash': alert.info_hash, 'save_path': './'})
+            h = self.ses.add_torrent({'info_hash': alert.info_hash.to_bytes(), 'save_path': './'})
             h.queue_position_top()
         elif alert_type == 'metadata_received_alert':
             h = alert.handle
